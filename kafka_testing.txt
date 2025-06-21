@@ -1,0 +1,56 @@
+This test is required as we have yet not created a Kafka consumer for the Patient Service.
+
+✅ Kafka Testing – Patient Service
+
+**1. Check if Kafka received the message:**
+
+first run -  docker exec -it kafka bash
+
+Run this inside your Kafka container:
+
+```bash
+kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic patient --from-beginning
+```
+
+You’ll see binary output like:
+
+```
+$3d112e70-eae0-4f31-a911-2e6adec2afec
+Test 6 Doe⸮test.doe3@example.com"PATIENT_CREATED
+```
+
+✔ Confirms message was sent successfully
+✔ Data is in **Protobuf** format (so not fully human-readable)
+
+---
+
+**2. Producer Confirmation in Code:**
+
+```java
+kafkaProducer.sendEvent(newPatient);
+```
+
+This sends a `PatientEvent` to topic `patient`.
+
+---
+
+**3. Protobuf Message:**
+
+```proto
+message PatientEvent {
+  string patientId = 1;
+  string name = 2;
+  string email = 3;
+  string event_type = 4;
+}
+```
+
+---
+
+**4. Kafka Topic Used:**
+
+```
+Topic: patient
+```
+
+

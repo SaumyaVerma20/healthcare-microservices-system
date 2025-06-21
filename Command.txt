@@ -32,3 +32,9 @@ docker exec -it kafka kafka-topics.sh --create --topic patient --bootstrap-serve
 To check if topic is created
 docker exec -it kafka kafka-topics.sh --list --bootstrap-server localhost:9092
 
+
+✅ Build the Docker Image
+docker build -t analytics-service .
+
+✅ Run the Docker Container
+docker run -d --name analytics-service-container --network pm-network -p 4002:4002 analytics-service
