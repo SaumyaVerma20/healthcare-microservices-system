@@ -38,3 +38,15 @@ docker build -t analytics-service .
 
 ✅ Run the Docker Container
 docker run -d --name analytics-service-container --network pm-network -p 4002:4002 analytics-service
+
+
+#Api-gateway
+docker build -t api-gateway .
+docker run -d --name api-gateway --network pm-network -p 4004:4004 api-gateway:latest
+
+
+#running patient-service without port
+docker run -d --name patient-service --network pm-network patient-service
+
+#For creating auth db
+docker run -d --name auth-service-db --network pm-network -e POSTGRES_DB=auth_db -e POSTGRES_USER=admin_user -e POSTGRES_PASSWORD=password -p 5001:5432 postgres:17
