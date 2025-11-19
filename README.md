@@ -2,7 +2,7 @@
 
 # Healthcare Microservices System
 
-A distributed healthcare management system built with **Java 21** and **Spring Boot 3.5**. This project demonstrates a modern microservices architecture utilizing synchronous **gRPC** communication for critical transactions and asynchronous **Kafka** event streaming for analytics.
+A distributed healthcare management system built with **Java 21** and **Spring Boot 3.5**. This project demonstrates a modern microservices architecture utilizing synchronous **REST APIs** for critical transactions and asynchronous **Kafka** event streaming for analytics.
 
 ## 🏗 System Architecture
 
@@ -17,18 +17,18 @@ graph TD
         Gateway[("🛡️ API Gateway<br/>(Port: 4004)")]
         Auth[("🔐 Auth Service<br/>(Port: 4005)")]
         Patient[("🏥 Patient Service<br/>(Port: 4000)")]
-        Billing[("VmBilling Service<br/>(gRPC Port: 9001)")]
+        Billing[("💳 Billing Service<br/>(Port: 4001)")]
         
         %% Event Streaming
         Kafka{{"🚀 Apache Kafka<br/>(Topic: patient)"}}
-        Analytics[("pq Analytics Service<br/>(Port: 4002)")]
+        Analytics[("📊 Analytics Service<br/>(Port: 4002)")]
         Notification[("🔔 Notification Service<br/>(Planned)")]
 
         %% Connections
         Gateway -.->|HTTP /auth| Auth
         Gateway -.->|HTTP /api/patients| Patient
         
-        Patient -- "Sync (gRPC)" --> Billing
+        Patient -- "Sync (REST)" --> Billing
         Patient -- "Async (Producer)" --> Kafka
         
         Kafka -.->|Consumer| Analytics
@@ -54,7 +54,7 @@ graph TD
 
   * **Microservices Architecture:** 5 distinct services with single responsibilities.
   * **Hybrid Communication:**
-      * **Synchronous:** Uses **gRPC (Protobuf)** for high-performance, strict-contract communication between Patient and Billing services.
+      * **Synchronous:** Uses **REST APIs** for standard, low-latency communication between Patient and Billing services.
       * **Asynchronous:** Uses **Apache Kafka** to decouple the Patient creation flow from Analytics processing.
   * **API Gateway:** Centralized entry point using **Spring Cloud Gateway** to route requests.
   * **Security:** **JWT** (JSON Web Token) based authentication and authorization.
@@ -67,7 +67,7 @@ graph TD
   * **Language:** Java 21 (OpenJDK)
   * **Framework:** Spring Boot 3.5.3
   * **Messaging:** Apache Kafka (Bitnami image)
-  * **RPC Framework:** gRPC with Protobuf
+  * **Communication:** REST (Spring Web)
   * **Database:** PostgreSQL 17
   * **Build Tool:** Maven 3.9.9
   * **Documentation:** SpringDoc OpenAPI (Swagger)
@@ -79,8 +79,8 @@ graph TD
 | Service | Port | Description |
 | :--- | :--- | :--- |
 | **API Gateway** | `4004` | Entry point, handles routing to downstream services. |
-| **Patient Service** | `4000` | Core service. Manages patient records (PostgreSQL). Orchestrates Billing and Analytics. |
-| **Billing Service** | `4001` / `9001` | Manages billing accounts. Accepts **gRPC** requests on port 9001. |
+| **Patient Service** | `4000` | Core service. Manages patient records (PostgreSQL). Orchestrates Billing via REST and Analytics via Kafka. |
+| **Billing Service** | `4001` | Manages billing accounts. Accepts **REST** requests. |
 | **Analytics Service**| `4002` | Consumes Kafka events (`PATIENT_CREATED`) for reporting. |
 | **Auth Service** | `4005` | Handles User login and JWT token generation. |
 
@@ -120,9 +120,9 @@ docker run -d --name kafka --network pm-network -p 9092:9092 -p 9094:9094 -e KAF
 *(Ensure you run `mvn clean package` in each service folder first to generate JARs)*
 
 ```bash
-# Billing Service
+# Billing Service (Note: Port 9001 removed as gRPC is no longer used)
 docker build -t billing-service ./billing-service
-docker run -d --name billing-service --network pm-network -p 4001:4001 -p 9001:9001 billing-service
+docker run -d --name billing-service --network pm-network -p 4001:4001 billing-service
 
 # Patient Service
 docker build -t patient-service ./patient-service
@@ -160,7 +160,7 @@ docker run -d --name api-gateway --network pm-network -p 4004:4004 api-gateway:l
 **What happens internally:**
 
 1.  **Patient Service** saves "Jane Doe" to PostgreSQL.
-2.  **Patient Service** calls **Billing Service** via **gRPC** to create an account.
+2.  **Patient Service** sends a **HTTP POST** request to the **Billing Service** to create an account.
 3.  **Patient Service** sends a message to **Kafka** topic `patient`.
 4.  **Analytics Service** consumes the message and logs: `Received Patient Event: [Jane Doe]`.
 
