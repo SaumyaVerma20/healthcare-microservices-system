@@ -1,0 +1,109 @@
+<div class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar glass-sidebar">
+    <div class="sidebar-header">
+      <div class="logo-circle">
+        <i class="icon-health"></i>
+      </div>
+      <h2>PatientSys</h2>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a routerLink="/dashboard" class="nav-item active">
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/add-patient" class="nav-item">
+        <span>Register Patient</span>
+      </a>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="top-bar glass-header">
+      <div class="page-title">
+        <h1>Patient Dashboard</h1>
+        <p>Manage and view all registered patients</p>
+      </div>
+      <div class="user-profile">
+        <div class="avatar">A</div>
+        <span>Admin User</span>
+      </div>
+    </header>
+
+    <div class="content-body">
+      <!-- Stats Row -->
+      <div class="stats-container">
+        <div class="stat-card glass-card">
+          <div class="stat-icon blue"></div>
+          <div class="stat-info">
+            <h3>Total Patients</h3>
+            <h2>{{ patients.length }}</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patients Table -->
+      <div class="table-container glass-card">
+        <div class="table-header">
+          <h2>Recent Patients</h2>
+          <button routerLink="/add-patient" class="add-btn gradient-btn">
+            + New Patient
+          </button>
+        </div>
+
+        <div *ngIf="isLoading" class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading records...</p>
+        </div>
+
+        <div *ngIf="error" class="error-state">
+          {{ error }}
+        </div>
+
+        <table *ngIf="!isLoading && !error" class="custom-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Date of Birth</th>
+              <th>Registration Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="patients.length === 0">
+              <td colspan="5" class="empty-state">No patients found. Click '+ New Patient' to add one.</td>
+            </tr>
+            <tr *ngFor="let patient of patients">
+              <td>
+                <div class="patient-name">
+                  <div class="avatar-small">{{ patient.name.charAt(0) }}</div>
+                  <span>{{ patient.name }}</span>
+                </div>
+              </td>
+              <td>{{ patient.email }}</td>
+              <td>{{ patient.dateOfBirth }}</td>
+              <td>
+                <span class="badge">{{ patient.registeredDate }}</span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn delete" (click)="deletePatient(patient.id!)">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

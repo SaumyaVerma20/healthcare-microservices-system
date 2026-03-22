@@ -1,0 +1,50 @@
+<div class="login-wrapper">
+  <div class="login-container glass-panel">
+    <div class="header">
+      <div class="logo-circle">
+        <i class="icon-health"></i>
+      </div>
+      <h2>Welcome Back</h2>
+      <p>Healthcare Microservices System</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="Enter your email"
+            [class.invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input 
+            type="password" 
+            id="password" 
+            formControlName="password" 
+            placeholder="Enter your password"
+            [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid" class="submit-btn gradient-btn">
+        Sign In
+      </button>
+
+      <div class="forgot-pwd">
+        <a href="#">Forgot your password?</a>
+      </div>
+    </form>
+  </div>
+</div>

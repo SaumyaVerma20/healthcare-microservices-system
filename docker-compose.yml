@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  # Databases
+  auth-service-db:
+    image: postgres:17
+    container_name: auth-service-db
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: admin_user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5001:5432"
+    networks:
+      - pm-network
+
+  patient-service-db:
+    image: postgres:17
+    container_name: patient-service-db
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5000:5432"
+    networks:
+      - pm-network
+
+  # Message Broker
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    networks:
+      - pm-network
+
+  kafka:
+    image: wurstmeister/kafka:2.13-2.8.1
+    container_name: kafka
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+    networks:
+      - pm-network
+
+  # Microservices
+  auth-service:
+    build:
+      context: ./backend/auth-service
+    container_name: auth-service
+    ports:
+      - "4005:4005"
+    depends_on:
+      - auth-service-db
+    networks:
+      - pm-network
+
+  patient-service:
+    build:
+      context: ./backend/patient-service
+    container_name: patient-service
+    ports:
+      - "4000:4000"
+    depends_on:
+      - patient-service-db
+      - kafka
+    networks:
+      - pm-network
+
+  analytics-service:
+    build:
+      context: ./backend/analytics-service
+    container_name: analytics-service
+    ports:
+      - "4002:4002"
+    depends_on:
+      - kafka
+    networks:
+      - pm-network
+
+  billing-service:
+    build:
+      context: ./backend/billing-service
+    container_name: billing-service
+    ports:
+      - "4001:4001"
+    networks:
+      - pm-network
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+    container_name: api-gateway
+    ports:
+      - "4004:4004"
+    depends_on:
+      - auth-service
+      - patient-service
+    networks:
+      - pm-network
+
+networks:
+  pm-network:
+    driver: bridge

@@ -1,0 +1,122 @@
+<div class="page-wrapper">
+  <!-- Layout Wrapper (Similar to dashboard layout but simpler) -->
+  <aside class="sidebar glass-sidebar">
+    <div class="sidebar-header">
+      <div class="logo-circle">
+        <i class="icon-health"></i>
+      </div>
+      <h2>PatientSys</h2>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a routerLink="/dashboard" class="nav-item">
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/add-patient" class="nav-item active">
+        <span>Register Patient</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-bar glass-header">
+      <div class="page-title">
+        <div class="breadcrumb">
+          <a routerLink="/dashboard">Patients</a> / <span>Register New</span>
+        </div>
+        <h1>Register Patient</h1>
+      </div>
+    </header>
+
+    <div class="content-body">
+      <div class="form-container glass-card">
+        <div class="form-header">
+          <h2>Patient Details</h2>
+          <p>Please enter the patient's personal information</p>
+        </div>
+
+        <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form">
+          <div class="form-row">
+            <div class="form-group half-width">
+              <label for="name">Full Name</label>
+              <div class="input-wrapper">
+                <input 
+                  type="text" 
+                  id="name" 
+                  formControlName="name" 
+                  placeholder="e.g. John Doe"
+                  [class.invalid]="patientForm.get('name')?.invalid && patientForm.get('name')?.touched">
+              </div>
+              <span class="error-msg" *ngIf="patientForm.get('name')?.invalid && patientForm.get('name')?.touched">
+                Valid name is required (max 100 chars)
+              </span>
+            </div>
+
+            <div class="form-group half-width">
+              <label for="email">Email Address</label>
+              <div class="input-wrapper">
+                <input 
+                  type="email" 
+                  id="email" 
+                  formControlName="email" 
+                  placeholder="e.g. john@example.com"
+                  [class.invalid]="patientForm.get('email')?.invalid && patientForm.get('email')?.touched">
+              </div>
+              <span class="error-msg" *ngIf="patientForm.get('email')?.invalid && patientForm.get('email')?.touched">
+                A valid email is required
+              </span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half-width">
+              <label for="dateOfBirth">Date of Birth</label>
+              <div class="input-wrapper">
+                <input 
+                  type="date" 
+                  id="dateOfBirth" 
+                  formControlName="dateOfBirth"
+                  [class.invalid]="patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched">
+              </div>
+            </div>
+
+            <div class="form-group half-width">
+              <label for="registeredDate">Registration Date</label>
+              <div class="input-wrapper">
+                <input 
+                  type="date" 
+                  id="registeredDate" 
+                  formControlName="registeredDate"
+                  [class.invalid]="patientForm.get('registeredDate')?.invalid && patientForm.get('registeredDate')?.touched">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Full Address</label>
+            <div class="input-wrapper">
+              <textarea 
+                id="address" 
+                formControlName="address" 
+                placeholder="Enter complete residential address"
+                rows="3"
+                [class.invalid]="patientForm.get('address')?.invalid && patientForm.get('address')?.touched"></textarea>
+            </div>
+          </div>
+
+          <div *ngIf="error" class="error-state">
+            {{ error }}
+          </div>
+
+          <div class="form-actions">
+            <button type="button" routerLink="/dashboard" class="cancel-btn">Cancel</button>
+            <button type="submit" [disabled]="patientForm.invalid || isSubmitting" class="submit-btn gradient-btn">
+              <span *ngIf="isSubmitting">Saving...</span>
+              <span *ngIf="!isSubmitting">Register Patient</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>

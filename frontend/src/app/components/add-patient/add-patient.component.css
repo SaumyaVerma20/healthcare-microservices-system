@@ -1,0 +1,251 @@
+.page-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f7fe;
+  color: #2b3674;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Sidebar (Reused layout styles) */
+.sidebar {
+  width: 260px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  z-index: 10;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 50px;
+}
+
+.logo-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4318FF 0%, #868CFF 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(67, 24, 255, 0.4);
+}
+
+.sidebar-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item {
+  padding: 15px 20px;
+  border-radius: 12px;
+  color: #a3aed1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-item:hover {
+  background: #f4f7fe;
+  color: #4318FF;
+}
+
+.nav-item.active {
+  background: #4318FF;
+  color: white;
+  box-shadow: 0 4px 15px rgba(67, 24, 255, 0.3);
+}
+
+/* Main Content */
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  color: #707eae;
+  margin-bottom: 8px;
+}
+
+.breadcrumb a {
+  color: #4318FF;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.page-title h1 {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Form Container */
+.form-container {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  margin-top: 30px;
+  max-width: 800px;
+}
+
+.form-header {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #f4f7fe;
+  padding-bottom: 20px;
+}
+
+.form-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 5px;
+}
+
+.form-header p {
+  color: #707eae;
+  margin: 0;
+  font-size: 14px;
+}
+
+.patient-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.half-width {
+  flex: 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2b3674;
+}
+
+.input-wrapper input,
+.input-wrapper textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #e0e5f2;
+  background: #f8fafc;
+  color: #2b3674;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.input-wrapper input:focus,
+.input-wrapper textarea:focus {
+  border-color: #4318FF;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.1);
+}
+
+.input-wrapper input.invalid,
+.input-wrapper textarea.invalid {
+  border-color: #ff5b5b;
+}
+
+.error-msg {
+  color: #ff5b5b;
+  font-size: 12px;
+  margin-top: -4px;
+}
+
+.error-state {
+  background: #fff0f0;
+  color: #ff5b5b;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f4f7fe;
+}
+
+.cancel-btn {
+  background: white;
+  color: #707eae;
+  border: 1px solid #e0e5f2;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cancel-btn:hover {
+  background: #f4f7fe;
+  color: #2b3674;
+}
+
+.submit-btn {
+  padding: 12px 30px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.gradient-btn {
+  background: linear-gradient(135deg, #4318FF 0%, #868CFF 100%);
+  box-shadow: 0 4px 15px rgba(67, 24, 255, 0.3);
+}
+
+.gradient-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(67, 24, 255, 0.4);
+}
+
+.gradient-btn:disabled {
+  background: #e0e5f2;
+  color: #a3aed1;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
